@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bagas Laundry Express - Solusi Cuci Pakaian Bersih, Cepat & Wangi</title>
+    <meta name="description" content="Layanan jasa laundry kiloan dan satuan terbaik dengan antar jemput, estimasi harga transparan, dan pengerjaan express.">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        /* Modal & Tab Preview Styles */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .preview-modal.active {
+            display: flex;
+        }
+        .preview-modal-content {
+            background: white;
+            width: 100%;
+            max-width: 950px;
+            max-height: 90vh;
+            border-radius: var(--radius-lg);
+            overflow-y: auto;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        .preview-modal-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+        .preview-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .preview-close:hover {
+            background: #f1f5f9;
+            color: var(--secondary);
+        }
+        .preview-badge-mode {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NOTIFIKASI MODE PREVIEW STANDALONE -->
+    <div style="background: #1e3a8a; color: #eff6ff; padding: 10px 1.5rem; font-size: 0.88rem; text-align: center; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+        <span class="preview-badge-mode" style="background: #2563eb; color: white; border: none;">
+            <i class="fa-solid fa-eye"></i> Standalone Preview Mode
+        </span>
+        <span>Anda sedang melihat tampilan antarmuka web tanpa perlu database MySQL aktif. Semua fitur, simulasi kalkulator, dan pelacakan dapat dicoba langsung!</span>
+        <a href="#demo-fitur" class="btn btn-sm btn-outline" style="background: white; color: #1e3a8a; padding: 2px 10px; font-size: 0.78rem;">
+            Lihat Semua Halaman &darr;
+        </a>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="brand-logo">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-soap"></i>
+                </div>
+                <span>Bagas Laundry</span>
+            </a>
+
+            <nav class="nav-menu">
+                <a href="#beranda" class="nav-link active">Beranda</a>
+                <a href="#layanan" class="nav-link">Layanan</a>
+                <a href="#kalkulator" class="nav-link">Hitung Biaya</a>
+                <a href="#lacak" class="nav-link">Lacak Pesanan</a>
+                <a href="#demo-fitur" class="nav-link">Pratinjau Fitur</a>
+            </nav>
+
+            <div class="nav-auth">
+                <button onclick="openModal('modal-login')" class="btn btn-sm btn-outline-primary">
+                    <i class="fa-solid fa-right-to-bracket"></i> Masuk
+                </button>
+                <button onclick="openModal('modal-register')" class="btn btn-sm btn-primary">
+                    <i class="fa-solid fa-user-plus"></i> Daftar
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="beranda">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-tag">
+                    <span class="live-dot"></span>
+                    <i class="fa-solid fa-sparkles"></i> Laundry Modern No. 1 di Kota Anda
+                </div>
+                <h1 class="hero-title">
+                    Pakaian Bersih, Rapi & Wangi <span>Tahan Hingga 7 Hari</span>
+                </h1>
+                <p class="hero-desc">
+                    Nikmati kemudahan mencuci tanpa ribet. Layanan antar-jemput gratis, proses higienis satu mesin per pelanggan, dan deterjen premium ramah serat kain.
+                </p>
+                <div class="hero-cta-group">
+                    <button onclick="openModal('modal-pesan')" class="btn btn-lg btn-primary">
+                        <i class="fa-solid fa-cart-shopping"></i> Pesan Laundry Sekarang
+                    </button>
+                    <a href="#kalkulator" class="btn btn-lg btn-outline">
+                        <i class="fa-solid fa-calculator"></i> Estimasi Biaya
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h4>10.000+</h4>
+                        <p>Kg Pakaian Bersih</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>24 Jam</h4>
+                        <p>Layanan Express</p>
+                    </div>
+                    <div class="stat-item">
+                        <h4>100%</h4>
+                        <p>Garansi Bersih & Wangi</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Interactive Tracking Form -->
+            <div class="hero-card" id="lacak">
+                <div style="margin-bottom: 1.25rem;">
+                    <span style="font-size: 0.8rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 1px;">Status Real-time</span>
+                    <h3 style="font-size: 1.35rem; font-weight: 800; margin-top: 4px;">Lacak Cucian Anda</h3>
+                    <p style="font-size: 0.88rem; color: var(--muted); margin-top: 4px;">Masukkan kode transaksi atau klik contoh di bawah ini:</p>
+                </div>
+
+                <div style="display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <button type="button" onclick="testKode('TRX-20260920-001')" class="btn btn-sm btn-outline" style="font-size: 0.75rem; padding: 2px 8px;">Contoh 1 (Selesai)</button>
+                    <button type="button" onclick="testKode('TRX-20260920-002')" class="btn btn-sm btn-outline" style="font-size: 0.75rem; padding: 2px 8px;">Contoh 2 (Dicuci)</button>
+                    <button type="button" onclick="testKode('TRX-20260921-003')" class="btn btn-sm btn-outline" style="font-size: 0.75rem; padding: 2px 8px;">Contoh 3 (Antri)</button>
+                </div>
+
+                <form onsubmit="lacakPesananSimulasi(event)">
+                    <div class="form-group">
+                        <div style="position: relative;">
+                            <input type="text" id="input-lacak" class="form-control" placeholder="Contoh: TRX-20260920-001" value="TRX-20260920-001" required style="padding-left: 2.75rem;">
+                            <i class="fa-solid fa-barcode" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--muted);"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fa-solid fa-magnifying-glass"></i> Cek Status Sekarang
+                    </button>
+                </form>
+
+                <!-- Box Hasil Lacak Simulasi -->
+                <div id="hasil-lacak-box" style="margin-top: 1.5rem; padding: 1.25rem; background: var(--bg-page); border-radius: var(--radius-md); border: 1.5px solid #a7f3d0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <strong id="res-kode" style="font-size: 0.95rem; font-family: monospace;">TRX-20260920-001</strong>
+                        <span id="res-status" class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Selesai</span>
+                    </div>
+                    <div style="font-size: 0.86rem; color: #475569; line-height: 1.6;">
+                        <div><strong>Pelanggan:</strong> <span id="res-nama">Budi Santoso</span></div>
+                        <div><strong>Layanan:</strong> <span id="res-layanan">Cuci Komplit Express (4 Kg)</span></div>
+                        <div><strong>Total Tagihan:</strong> <span id="res-total">Rp 40.000</span> (<span id="res-bayar" style="color: #2563eb; font-weight: bold;">Lunas</span>)</div>
+                        <div><strong>Waktu Masuk:</strong> <span id="res-tgl">20 September 2026, 10:15 WIB</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: DAFTAR LAYANAN -->
+    <section class="section" id="layanan">
+        <div class="section-header">
+            <span class="section-subtitle">Pilihan Paket Cuci</span>
+            <h2 class="section-title">Layanan Terbaik Untuk Pakaian Anda</h2>
+            <p class="section-desc">Pilihan layanan yang fleksibel sesuai kebutuhan Anda, mulai dari kiloan hemat hingga perawatan khusus satuan premium.</p>
+        </div>
+
+        <div class="grid-3">
+            <div class="card-service">
+                <div class="service-icon-box"><i class="fa-solid fa-bolt"></i></div>
+                <h3 class="service-name">Cuci Komplit Express</h3>
+                <div class="service-price">Rp 10.000 <span>/ Kg</span></div>
+                <p class="service-desc">Cuci bersih, pengeringan higienis, setrika rapi, wangi tahan lama. Selesai dalam 24 Jam.</p>
+                <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">
+                    <i class="fa-regular fa-clock" style="color: var(--primary);"></i> Estimasi: <strong>1 Hari Kerja</strong>
+                </div>
+                <button onclick="pilihLayananOrder(1, 10000, 'Cuci Komplit Express', 'kiloan')" class="btn btn-outline-primary btn-block">
+                    <i class="fa-solid fa-check"></i> Pesan Layanan Ini
+                </button>
+            </div>
+
+            <div class="card-service">
+                <div class="service-icon-box"><i class="fa-solid fa-shirt"></i></div>
+                <h3 class="service-name">Cuci Komplit Reguler</h3>
+                <div class="service-price">Rp 7.000 <span>/ Kg</span></div>
+                <p class="service-desc">Cuci wangi, kering 100%, setrika rapi & packing plastik segel pelindung debu.</p>
+                <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">
+                    <i class="fa-regular fa-clock" style="color: var(--primary);"></i> Estimasi: <strong>2 Hari Kerja</strong>
+                </div>
+                <button onclick="pilihLayananOrder(2, 7000, 'Cuci Komplit Reguler', 'kiloan')" class="btn btn-outline-primary btn-block">
+                    <i class="fa-solid fa-check"></i> Pesan Layanan Ini
+                </button>
+            </div>
+
+            <div class="card-service">
+                <div class="service-icon-box"><i class="fa-solid fa-wind"></i></div>
+                <h3 class="service-name">Cuci Kering Lipat</h3>
+                <div class="service-price">Rp 5.000 <span>/ Kg</span></div>
+                <p class="service-desc">Cuci bersih deterjen khusus, kering wangi dan dilipat rapi tanpa setrika (praktis & hemat).</p>
+                <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">
+                    <i class="fa-regular fa-clock" style="color: var(--primary);"></i> Estimasi: <strong>2 Hari Kerja</strong>
+                </div>
+                <button onclick="pilihLayananOrder(3, 5000, 'Cuci Kering Lipat', 'kiloan')" class="btn btn-outline-primary btn-block">
+                    <i class="fa-solid fa-check"></i> Pesan Layanan Ini
+                </button>
+            </div>
+
+            <div class="card-service">
+                <div class="service-icon-box"><i class="fa-solid fa-fire"></i></div>
+                <h3 class="service-name">Setrika Uap Saja</h3>
+                <div class="service-price">Rp 4.000 <span>/ Kg</span></div>
+                <p class="service-desc">Pakaian rapi licin bebas kusut dengan teknologi setrika uap modern tanpa merusak serat kain.</p>
+                <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">
+                    <i class="fa-regular fa-clock" style="color: var(--primary);"></i> Estimasi: <strong>1 Hari Kerja</strong>
+                </div>
+                <button onclick="pilihLayananOrder(4, 4000, 'Setrika Uap Saja', 'kiloan')" class="btn btn-outline-primary btn-block">
+                    <i class="fa-solid fa-check"></i> Pesan Layanan Ini
+                </button>
+            </div>
+
+            <div class="card-service">
+                <div class="service-icon-box"><i class="fa-solid fa-bed"></i></div>
+                <h3 class="service-name">Bed Cover & Selimut</h3>
+                <div class="service-price">Rp 25.000 <span>/ Item</span></div>
+                <p class="service-desc">Pembersihan mendalam untuk bed cover tebal, selimut bulu & sprei agar higienis bebas tungau.</p>
+                <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">
+                    <i class="fa-regular fa-clock" style="color: var(--primary);"></i> Estimasi: <strong>2 Hari Kerja</strong>
+                </div>
+                <button onclick="pilihLayananOrder(5, 25000, 'Bed Cover & Selimut', 'satuan')" class="btn btn-outline-primary btn-block">
+                    <i class="fa-solid fa-check"></i> Pesan Layanan Ini
+                </button>
+            </div>
+
+            <div class="card-service">
+                <div class="service-icon-box"><i class="fa-solid fa-shoe-prints"></i></div>
+                <h3 class="service-name">Sepatu & Tas Premium</h3>
+                <div class="service-price">Rp 35.000 <span>/ Item</span></div>
+                <p class="service-desc">Deep clean sepatu sneakers, kulit, suede, dan tas dengan cairan khusus aman segala material.</p>
+                <div style="font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem;">
+                    <i class="fa-regular fa-clock" style="color: var(--primary);"></i> Estimasi: <strong>3 Hari Kerja</strong>
+                </div>
+                <button onclick="pilihLayananOrder(6, 35000, 'Sepatu & Tas Premium', 'satuan')" class="btn btn-outline-primary btn-block">
+                    <i class="fa-solid fa-check"></i> Pesan Layanan Ini
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: KALKULATOR ESTIMASI HARGA -->
+    <section class="section" id="kalkulator" style="background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); border: 1px solid var(--border); margin-bottom: 4rem;">
+        <div class="grid-2" style="align-items: center;">
+            <div>
+                <span class="section-subtitle">Transparansi Biaya</span>
+                <h2 class="section-title" style="margin-bottom: 1rem;">Kalkulator Estimasi Biaya Laundry</h2>
+                <p class="section-desc" style="margin-bottom: 1.5rem;">
+                    Hitung perkiraan biaya cucian Anda sebelum memesan. Tidak ada biaya tersembunyi, semua transparan dan terjangkau.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--primary);"></i>
+                        <span>Gratis penjemputan untuk pemesanan minimal 5 Kg</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--primary);"></i>
+                        <span>Deterjen anti-bakteri dan pelembut premium</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px; font-size: 0.95rem;">
+                        <i class="fa-solid fa-circle-check" style="color: var(--primary);"></i>
+                        <span>Pilihan parfum wangi segar yang elegan</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: var(--bg-page); padding: 2rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                <div class="form-group">
+                    <label class="form-label">Pilih Paket Layanan</label>
+                    <select id="calc-layanan" class="form-select">
+                        <option value="1" data-harga="10000" data-jenis="kiloan">Cuci Komplit Express (Rp 10.000 / Kg)</option>
+                        <option value="2" data-harga="7000" data-jenis="kiloan" selected>Cuci Komplit Reguler (Rp 7.000 / Kg)</option>
+                        <option value="3" data-harga="5000" data-jenis="kiloan">Cuci Kering Lipat (Rp 5.000 / Kg)</option>
+                        <option value="4" data-harga="4000" data-jenis="kiloan">Setrika Uap Saja (Rp 4.000 / Kg)</option>
+                        <option value="5" data-harga="25000" data-jenis="satuan">Bed Cover & Selimut (Rp 25.000 / Item)</option>
+                        <option value="6" data-harga="35000" data-jenis="satuan">Sepatu & Tas Premium (Rp 35.000 / Item)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Perkiraan Berat / Jumlah (<span id="calc-satuan-label">Kg</span>)</label>
+                    <input type="number" id="calc-jumlah" class="form-control" value="4" min="1" step="0.5">
+                </div>
+
+                <div style="margin: 1.75rem 0; padding: 1.25rem; background: var(--primary-subtle); border-radius: var(--radius-sm); border: 1px dashed var(--primary); text-align: center;">
+                    <div style="font-size: 0.88rem; color: var(--primary-dark); font-weight: 600;">Estimasi Total Pembayaran:</div>
+                    <div id="calc-total" style="font-size: 2.2rem; font-weight: 800; color: var(--primary-dark); margin-top: 4px;">Rp 28.000</div>
+                </div>
+
+                <button onclick="openModal('modal-pesan')" class="btn btn-primary btn-block btn-lg">
+                    <i class="fa-solid fa-paper-plane"></i> Lanjutkan Pemesanan
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION: PUSAT PRATINJAU SEMUA HALAMAN APLIKASI -->
+    <section class="section" id="demo-fitur" style="background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); border-radius: var(--radius-lg); border: 2px solid #bfdbfe;">
+        <div class="section-header">
+            <span class="section-subtitle">Galeri Fitur Lengkap</span>
+            <h2 class="section-title">Pratinjau Seluruh Halaman Pesanan Orang Ini</h2>
+            <p class="section-desc">Klik tombol di bawah ini untuk melihat rancangan setiap halaman (Form Pesan, Riwayat, Admin Data Laundry, dan Laporan Cetak):</p>
+        </div>
+
+        <div class="grid-4">
+            <div class="preview-option-card">
+                <div style="font-size: 2rem; color: #2563eb; margin-bottom: 0.75rem;"><i class="fa-solid fa-cart-flatbed-suitcase"></i></div>
+                <h4 style="margin-bottom: 0.5rem;">1. Form Pemesanan</h4>
+                <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem;">Form pelanggan pilih paket, berat, antar-jemput & catatan.</p>
+                <button onclick="openModal('modal-pesan')" class="btn btn-sm btn-outline-primary btn-block">Buka Form Pesan</button>
+            </div>
+
+            <div class="preview-option-card">
+                <div style="font-size: 2rem; color: #0284c7; margin-bottom: 0.75rem;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                <h4 style="margin-bottom: 0.5rem;">2. Riwayat Pelanggan</h4>
+                <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem;">Daftar cucian pelanggan dengan badge status real-time.</p>
+                <button onclick="openModal('modal-riwayat')" class="btn btn-sm btn-outline-primary btn-block">Buka Riwayat</button>
+            </div>
+
+            <div class="preview-option-card">
+                <div style="font-size: 2rem; color: #d97706; margin-bottom: 0.75rem;"><i class="fa-solid fa-table-list"></i></div>
+                <h4 style="margin-bottom: 0.5rem;">3. Data Laundry Admin</h4>
+                <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem;">Tabel kasir/admin, filter cucian & ubah status proses.</p>
+                <button onclick="openModal('modal-admin')" class="btn btn-sm btn-outline-primary btn-block">Buka Data Admin</button>
+            </div>
+
+            <div class="preview-option-card">
+                <div style="font-size: 2rem; color: #7c3aed; margin-bottom: 0.75rem;"><i class="fa-solid fa-print"></i></div>
+                <h4 style="margin-bottom: 0.5rem;">4. Laporan & Cetak</h4>
+                <p style="font-size: 0.82rem; color: var(--muted); margin-bottom: 1rem;">Rekapitulasi omset, filter tanggal dan cetak struk/nota.</p>
+                <button onclick="openModal('modal-laporan')" class="btn btn-sm btn-outline-primary btn-block">Buka Laporan</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3><i class="fa-solid fa-soap"></i> Bagas Laundry Express</h3>
+                <p>
+                    Layanan binatu modern profesional dengan teknologi ramah lingkungan, wangi eksklusif, dan jaminan cucian bersih higienis tepat waktu.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigasi</h4>
+                <ul class="footer-links">
+                    <li><a href="#beranda">Beranda</a></li>
+                    <li><a href="#layanan">Layanan</a></li>
+                    <li><a href="#kalkulator">Hitung Biaya</a></li>
+                    <li><a href="#lacak">Lacak Cucian</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Paket Pilihan</h4>
+                <ul class="footer-links">
+                    <li><a href="#layanan">Cuci Komplit Express</a></li>
+                    <li><a href="#layanan">Cuci Komplit Reguler</a></li>
+                    <li><a href="#layanan">Cuci Kering Lipat</a></li>
+                    <li><a href="#layanan">Setrika Uap</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Jam Operasional</h4>
+                <div style="font-size: 0.88rem; color: #94a3b8; line-height: 1.7;">
+                    <p><i class="fa-solid fa-clock" style="color: var(--primary-light); margin-right: 6px;"></i> Buka Setiap Hari: 07.00 - 21.00 WIB</p>
+                    <p style="margin-top: 0.5rem;"><i class="fa-solid fa-location-dot" style="color: var(--primary-light); margin-right: 6px;"></i> Jl. Bersih Sejahtera No. 12</p>
+                    <p style="margin-top: 0.5rem;"><i class="fa-solid fa-phone" style="color: var(--primary-light); margin-right: 6px;"></i> 0812-3456-7890</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Bagas Laundry Express. Seluruh hak cipta dilindungi.
+        </div>
+    </footer>
+
+    <!-- ============================================================
+         MODAL 1: PREVIEW FORM PESAN LAUNDRY
+         ============================================================ -->
+    <div id="modal-pesan" class="preview-modal">
+        <div class="preview-modal-content">
+            <div class="preview-modal-header">
+                <div>
+                    <span class="preview-badge-mode"><i class="fa-solid fa-eye"></i> Tampilan Halaman: pesan.php</span>
+                    <h3 style="margin-top: 4px; font-size: 1.25rem;">Formulir Pemesanan Laundry Pelanggan</h3>
+                </div>
+                <button onclick="closeModal('modal-pesan')" class="preview-close">&times;</button>
+            </div>
+            <div style="padding: 2rem;">
+                <form onsubmit="simulasiSubmitPesanan(event)">
+                    <div style="background: var(--bg-page); padding: 1rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border); margin-bottom: 1.5rem;">
+                        <div style="font-weight: 700; color: var(--secondary); margin-bottom: 4px;"><i class="fa-solid fa-user-check" style="color: var(--primary);"></i> Data Pelanggan Terdeteksi</div>
+                        <div style="font-size: 0.88rem; color: var(--muted);">Budi Santoso &bull; WhatsApp: 0812-3456-7890</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Pilih Paket Layanan</label>
+                        <select id="modal-layanan-select" class="form-select">
+                            <option value="10000">Cuci Komplit Express — Rp 10.000 / Kg (1 Hari)</option>
+                            <option value="7000" selected>Cuci Komplit Reguler — Rp 7.000 / Kg (2 Hari)</option>
+                            <option value="5000">Cuci Kering Lipat — Rp 5.000 / Kg (2 Hari)</option>
+                            <option value="4000">Setrika Uap Saja — Rp 4.000 / Kg (1 Hari)</option>
+                            <option value="25000">Bed Cover & Selimut — Rp 25.000 / Item (2 Hari)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Estimasi Berat (Kg) / Jumlah Item</label>
+                        <input type="number" id="modal-berat-input" class="form-control" value="4" min="1" step="0.5">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Metode Penyerahan Pakaian</label>
+                        <select class="form-select">
+                            <option>Antar Jemput oleh Kurir Laundry ke Rumah</option>
+                            <option>Drop Off Sendiri ke Outlet Bagas Laundry</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Alamat Penjemputan Pakaian</label>
+                        <textarea class="form-control" rows="2">Jl. Mawar Melati No. 45, Komplek Permai Indah Blok C2</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Catatan Khusus (Opsional)</label>
+                        <input type="text" class="form-control" placeholder="Contoh: Parfum rasa lavender, baju putih dipisah">
+                    </div>
+
+                    <div style="margin: 1.5rem 0; padding: 1.25rem; background: var(--primary-subtle); border-radius: var(--radius-sm); border: 1.5px dashed var(--primary); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 700; color: var(--primary-dark);">Perkiraan Total Bayar:</div>
+                            <div style="font-size: 0.8rem; color: var(--muted);">Bayar tunai / QRIS saat cucian selesai</div>
+                        </div>
+                        <div id="modal-order-total" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-dark);">Rp 28.000</div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block btn-lg">
+                        <i class="fa-solid fa-paper-plane"></i> Simulasikan Buat Pesanan
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL 2: PREVIEW RIWAYAT PESANAN PELANGGAN
+         ============================================================ -->
+    <div id="modal-riwayat" class="preview-modal">
+        <div class="preview-modal-content">
+            <div class="preview-modal-header">
+                <div>
+                    <span class="preview-badge-mode"><i class="fa-solid fa-eye"></i> Tampilan Halaman: riwayat.php</span>
+                    <h3 style="margin-top: 4px; font-size: 1.25rem;">Riwayat Pesanan Pelanggan (Budi Santoso)</h3>
+                </div>
+                <button onclick="closeModal('modal-riwayat')" class="preview-close">&times;</button>
+            </div>
+            <div style="padding: 2rem;">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Kode Transaksi</th>
+                                <th>Tanggal Masuk</th>
+                                <th>Paket Layanan</th>
+                                <th>Berat</th>
+                                <th>Total Biaya</th>
+                                <th>Status Pengerjaan</th>
+                                <th>Status Bayar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong style="color: var(--primary-dark); font-family: monospace;">TRX-20260920-001</strong></td>
+                                <td>20/09/2026, 09:30</td>
+                                <td>Cuci Komplit Express</td>
+                                <td>4.0 Kg</td>
+                                <td><strong>Rp 40.000</strong></td>
+                                <td><span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Selesai</span></td>
+                                <td><span class="badge badge-success">Lunas</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color: var(--primary-dark); font-family: monospace;">TRX-20260920-002</strong></td>
+                                <td>20/09/2026, 14:15</td>
+                                <td>Cuci Komplit Reguler</td>
+                                <td>6.5 Kg</td>
+                                <td><strong>Rp 45.500</strong></td>
+                                <td><span class="badge badge-primary"><i class="fa-solid fa-soap"></i> Proses Cuci</span></td>
+                                <td><span class="badge badge-success">Lunas</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color: var(--primary-dark); font-family: monospace;">TRX-20260921-003</strong></td>
+                                <td>21/09/2026, 08:00</td>
+                                <td>Bed Cover & Selimut</td>
+                                <td>2 Item</td>
+                                <td><strong>Rp 50.000</strong></td>
+                                <td><span class="badge badge-warning"><i class="fa-solid fa-clock"></i> Menunggu Konfirmasi</span></td>
+                                <td><span class="badge badge-danger">Belum Lunas</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL 3: PREVIEW DATA LAUNDRY ADMIN
+         ============================================================ -->
+    <div id="modal-admin" class="preview-modal">
+        <div class="preview-modal-content">
+            <div class="preview-modal-header">
+                <div>
+                    <span class="preview-badge-mode"><i class="fa-solid fa-eye"></i> Tampilan Halaman: admin/data_laundry.php</span>
+                    <h3 style="margin-top: 4px; font-size: 1.25rem;">Panel Administrator & Manajemen Cucian</h3>
+                </div>
+                <button onclick="closeModal('modal-admin')" class="preview-close">&times;</button>
+            </div>
+            <div style="padding: 2rem;">
+                <!-- Stat Cards -->
+                <div class="stats-grid" style="margin-bottom: 1.5rem;">
+                    <div class="stat-card">
+                        <div class="stat-icon mint"><i class="fa-solid fa-receipt"></i></div>
+                        <div>
+                            <div class="stat-number">28</div>
+                            <div class="stat-label">Total Pesanan</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fa-solid fa-spinner"></i></div>
+                        <div>
+                            <div class="stat-number">6</div>
+                            <div class="stat-label">Sedang Diproses</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon mint"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <div class="stat-number">22</div>
+                            <div class="stat-label">Cucian Selesai</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon amber"><i class="fa-solid fa-wallet"></i></div>
+                        <div>
+                            <div class="stat-number" style="font-size: 1.2rem;">Rp 1.485.000</div>
+                            <div class="stat-label">Pendapatan Lunas</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Kode Transaksi</th>
+                                <th>Pelanggan</th>
+                                <th>Layanan</th>
+                                <th>Berat</th>
+                                <th>Total</th>
+                                <th>Status Cucian</th>
+                                <th>Status Bayar</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong style="color: var(--primary-dark); font-family: monospace;">TRX-20260920-001</strong></td>
+                                <td><strong>Budi Santoso</strong><div style="font-size: 0.75rem; color: var(--muted);">0812-3456-7890</div></td>
+                                <td>Cuci Komplit Express</td>
+                                <td>4.0 Kg</td>
+                                <td>Rp 40.000</td>
+                                <td><span class="badge badge-success">Selesai</span></td>
+                                <td><span class="badge badge-success">Lunas</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary" onclick="alert('Ini adalah tombol untuk mengubah status dan mencetak struk nota satuan di panel admin.')">Kelola</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color: var(--primary-dark); font-family: monospace;">TRX-20260920-002</strong></td>
+                                <td><strong>Siti Rahmawati</strong><div style="font-size: 0.75rem; color: var(--muted);">0857-1122-3344</div></td>
+                                <td>Cuci Komplit Reguler</td>
+                                <td>6.5 Kg</td>
+                                <td>Rp 45.500</td>
+                                <td><span class="badge badge-primary">Proses Cuci</span></td>
+                                <td><span class="badge badge-success">Lunas</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary" onclick="alert('Ini adalah tombol untuk mengubah status dan mencetak struk nota satuan di panel admin.')">Kelola</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong style="color: var(--primary-dark); font-family: monospace;">TRX-20260921-003</strong></td>
+                                <td><strong>Budi Santoso</strong><div style="font-size: 0.75rem; color: var(--muted);">0812-3456-7890</div></td>
+                                <td>Bed Cover & Selimut</td>
+                                <td>2 Item</td>
+                                <td>Rp 50.000</td>
+                                <td><span class="badge badge-warning">Menunggu Konfirmasi</span></td>
+                                <td><span class="badge badge-danger">Belum Lunas</span></td>
+                                <td><button class="btn btn-sm btn-outline-primary" onclick="alert('Ini adalah tombol untuk mengubah status dan mencetak struk nota satuan di panel admin.')">Kelola</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL 4: PREVIEW LAPORAN TRANSAKSI & CETAK
+         ============================================================ -->
+    <div id="modal-laporan" class="preview-modal">
+        <div class="preview-modal-content">
+            <div class="preview-modal-header">
+                <div>
+                    <span class="preview-badge-mode"><i class="fa-solid fa-eye"></i> Tampilan Halaman: admin/laporan.php</span>
+                    <h3 style="margin-top: 4px; font-size: 1.25rem;">Laporan Rekapitulasi & Cetak PDF</h3>
+                </div>
+                <button onclick="closeModal('modal-laporan')" class="preview-close">&times;</button>
+            </div>
+            <div style="padding: 2rem;">
+                <div style="border: 2px dashed #2563eb; padding: 2rem; border-radius: var(--radius-md); background: #eff6ff; text-align: center; margin-bottom: 2rem;">
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #1e3a8a; text-transform: uppercase;">BAGAS LAUNDRY EXPRESS</div>
+                    <div style="font-size: 0.9rem; color: #334155;">LAPORAN TRANSAKSI PENDAPATAN BULAN INI</div>
+                    <div style="font-size: 0.8rem; color: var(--muted); margin-top: 4px;">Periode: 01 September 2026 s/d 21 September 2026</div>
+
+                    <hr style="margin: 1.25rem 0; border: none; border-top: 1px solid #bfdbfe;">
+
+                    <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem; text-align: center;">
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--muted);">Total Transaksi</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--secondary);">28 Pesanan</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--muted);">Total Berat Tercuci</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--secondary);">142.5 Kg</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.85rem; color: var(--muted);">Total Omset Bersih</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: #2563eb;">Rp 1.485.000</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button onclick="window.print()" class="btn btn-primary btn-lg">
+                        <i class="fa-solid fa-print"></i> Tes Cetak Laporan (Print / PDF)
+                    </button>
+                    <div style="font-size: 0.82rem; color: var(--muted); margin-top: 8px;">* Format cetak resmi sudah dilengkapi KOP surat dan kolom tanda tangan penanggung jawab.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         MODAL LOGIN & REGISTER
+         ============================================================ -->
+    <div id="modal-login" class="preview-modal">
+        <div class="preview-modal-content" style="max-width: 440px;">
+            <div class="preview-modal-header">
+                <h3 style="font-size: 1.15rem; font-weight: 800;">Masuk ke Akun</h3>
+                <button onclick="closeModal('modal-login')" class="preview-close">&times;</button>
+            </div>
+            <div style="padding: 2rem;">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" value="admin@bagaslaundry.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Kata Sandi</label>
+                    <input type="password" class="form-control" value="••••••••">
+                </div>
+                <button onclick="alert('Saat database dan XAMPP dinyalakan, Anda dapat login dengan akun ini untuk mengelola data!'); closeModal('modal-login');" class="btn btn-primary btn-block">
+                    Masuk Sekarang
+                </button>
+                <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--muted); text-align: center;">
+                    Akun Demo Siap Pakai: <strong>admin@bagaslaundry.com</strong> (admin123) atau <strong>budi@gmail.com</strong> (user123)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-register" class="preview-modal">
+        <div class="preview-modal-content" style="max-width: 480px;">
+            <div class="preview-modal-header">
+                <h3 style="font-size: 1.15rem; font-weight: 800;">Daftar Akun Pelanggan Baru</h3>
+                <button onclick="closeModal('modal-register')" class="preview-close">&times;</button>
+            </div>
+            <div style="padding: 2rem;">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" class="form-control" placeholder="Contoh: Budi Santoso">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nomor WhatsApp / HP</label>
+                    <input type="tel" class="form-control" placeholder="081234567890">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Alamat Rumah</label>
+                    <textarea class="form-control" rows="2" placeholder="Nama jalan, nomor rumah, kelurahan"></textarea>
+                </div>
+                <button onclick="alert('Fitur registrasi siap menyimpan pelanggan baru ke database MySQL.'); closeModal('modal-register');" class="btn btn-primary btn-block">
+                    Daftar Akun
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Data Mock untuk Simulasi Lacak Cucian
+        const dataDemo = {
+            'TRX-20260920-001': {
+                kode: 'TRX-20260920-001',
+                nama: 'Budi Santoso',
+                layanan: 'Cuci Komplit Express (4 Kg)',
+                total: 'Rp 40.000',
+                bayar: 'Lunas',
+                tgl: '20 September 2026, 09:30 WIB',
+                status: '<span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Selesai (Siap Diambil)</span>'
+            },
+            'TRX-20260920-002': {
+                kode: 'TRX-20260920-002',
+                nama: 'Siti Rahmawati',
+                layanan: 'Cuci Komplit Reguler (6.5 Kg)',
+                total: 'Rp 45.500',
+                bayar: 'Lunas',
+                tgl: '20 September 2026, 14:15 WIB',
+                status: '<span class="badge badge-primary"><i class="fa-solid fa-soap"></i> Sedang Dicuci & Disetrika</span>'
+            },
+            'TRX-20260921-003': {
+                kode: 'TRX-20260921-003',
+                nama: 'Budi Santoso',
+                layanan: 'Bed Cover & Selimut (2 Item)',
+                total: 'Rp 50.000',
+                bayar: 'Belum Lunas',
+                tgl: '21 September 2026, 08:00 WIB',
+                status: '<span class="badge badge-warning"><i class="fa-solid fa-clock"></i> Menunggu Konfirmasi Petugas</span>'
+            }
+        };
+
+        function testKode(kode) {
+            document.getElementById('input-lacak').value = kode;
+            tampilkanLacak(kode);
+        }
+
+        function lacakPesananSimulasi(e) {
+            e.preventDefault();
+            const kode = document.getElementById('input-lacak').value.trim();
+            tampilkanLacak(kode);
+        }
+
+        function tampilkanLacak(kode) {
+            const res = dataDemo[kode];
+            const box = document.getElementById('hasil-lacak-box');
+            if (res) {
+                document.getElementById('res-kode').textContent = res.kode;
+                document.getElementById('res-nama').textContent = res.nama;
+                document.getElementById('res-layanan').textContent = res.layanan;
+                document.getElementById('res-total').textContent = res.total;
+                document.getElementById('res-bayar').textContent = res.bayar;
+                document.getElementById('res-tgl').textContent = res.tgl;
+                document.getElementById('res-status').innerHTML = res.status;
+                box.style.display = 'block';
+            } else {
+                alert('Pesanan dengan kode "' + kode + '" tidak ditemukan dalam data simulasi. Gunakan contoh: TRX-20260920-001, TRX-20260920-002, atau TRX-20260921-003.');
+            }
+        }
+
+        // Kalkulator Estimasi Biaya
+        const calcLayanan = document.getElementById('calc-layanan');
+        const calcJumlah = document.getElementById('calc-jumlah');
+        const calcTotal = document.getElementById('calc-total');
+        const calcSatuanLabel = document.getElementById('calc-satuan-label');
+
+        function updateCalc() {
+            const opt = calcLayanan.options[calcLayanan.selectedIndex];
+            const harga = parseFloat(opt.getAttribute('data-harga')) || 0;
+            const jenis = opt.getAttribute('data-jenis') || 'kiloan';
+            const jml = parseFloat(calcJumlah.value) || 0;
+
+            calcSatuanLabel.textContent = (jenis === 'kiloan') ? 'Kg' : 'Item';
+            const total = Math.round(harga * jml);
+            calcTotal.textContent = 'Rp ' + total.toLocaleString('id-ID');
+        }
+
+        calcLayanan.addEventListener('change', updateCalc);
+        calcJumlah.addEventListener('input', updateCalc);
+        updateCalc();
+
+        // Modal Handler
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        // Hitung Total di Modal Pesan
+        const modalLayanan = document.getElementById('modal-layanan-select');
+        const modalBerat = document.getElementById('modal-berat-input');
+        const modalTotal = document.getElementById('modal-order-total');
+
+        function updateModalTotal() {
+            const harga = parseFloat(modalLayanan.value) || 0;
+            const berat = parseFloat(modalBerat.value) || 0;
+            modalTotal.textContent = 'Rp ' + (harga * berat).toLocaleString('id-ID');
+        }
+        modalLayanan.addEventListener('change', updateModalTotal);
+        modalBerat.addEventListener('input', updateModalTotal);
+        updateModalTotal();
+
+        function pilihLayananOrder(id, harga, nama, jenis) {
+            openModal('modal-pesan');
+            modalLayanan.value = harga;
+            updateModalTotal();
+        }
+
+        function simulasiSubmitPesanan(e) {
+            e.preventDefault();
+            alert('Sukses! Pesanan baru berhasil disimulasikan. Pada versi database terhubung, pesanan ini otomatis masuk ke antrean admin dan riwayat pelanggan.');
+            closeModal('modal-pesan');
+            openModal('modal-riwayat');
+        }
+    </script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
